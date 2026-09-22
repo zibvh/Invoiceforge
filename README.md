@@ -22,3 +22,4 @@ Open `index.html` in a browser or serve the folder with any static host.
 
 For the best PDF experience, use the browser print dialog and choose Save as PDF.
 # Invoice-maker
+# Invoice-maker
