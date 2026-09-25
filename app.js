@@ -95,7 +95,7 @@ function showToast(msg){
 function money(n, c){
   return new Intl.NumberFormat(undefined, {
     style:"currency",
-    currency:c || "NGN",
+    currency:c || "USD",
     maximumFractionDigits:2
   }).format(Number(n) || 0);
 }
@@ -341,7 +341,7 @@ function newInvoice(){
   const next = `INV-${String(Date.now()).slice(-4)}`;
   const base = {
     businessName:"",businessEmail:"",businessPhone:"",businessWebsite:"",businessAddress:"",
-    clientName:"",clientEmail:"",clientAddress:"",invoiceNumber:next,currency:"NGN",
+    clientName:"",clientEmail:"",clientAddress:"",invoiceNumber:next,currency:"USD",
     issueDate:today(),dueDate:today(14),paymentMethod:"Bank transfer",
     notes:"Thank you for your business!",terms:"",discount:0,tax:0,items:[{description:"",qty:1,rate:0}],
     paymentFields:{},logo:"",template:"modern",invoiceId:makeId(),status:"draft"
@@ -402,9 +402,11 @@ function renderPaymentMethods(){
     </button>`).join("");
   $$("[data-payment]", $("#paymentMethods")).forEach(btn => {
     btn.onclick = () => {
-      form.elements.paymentMethod.value = btn.dataset.payment;
+      const method = btn.dataset.payment;
+      const paymentInput = form.querySelector('[name="paymentMethod"]');
+      if(paymentInput) paymentInput.value = method;
       const current = values().paymentFields || {};
-      renderPaymentFields(btn.dataset.payment, current);
+      renderPaymentFields(method, current);
       render();
       queueAutosave();
     };
@@ -627,14 +629,14 @@ $("#clearHistoryBtn").onclick = () => {
   } else {
     const base = {
       businessName:"",businessEmail:"",businessPhone:"",businessWebsite:"",businessAddress:"",
-      clientName:"",clientEmail:"",clientAddress:"",invoiceNumber:"INV-0001",currency:"NGN",
+      clientName:"",clientEmail:"",clientAddress:"",invoiceNumber:"INV-0001",currency:"USD",
       issueDate:today(),dueDate:today(14),paymentMethod:"Bank transfer",notes:"Thank you for your business!",
       terms:"",discount:0,tax:0,items:[{description:"Website design & development",qty:1,rate:150000}],
       paymentFields:{},logo:"",template:"modern",invoiceId:makeId(),status:"draft"
     };
     loadData(base);
   }
-  renderPaymentFields(form.elements.paymentMethod.value || "Bank transfer", values().paymentFields || {});
+  renderPaymentFields(form.querySelector('[name="paymentMethod"]')?.value || "Bank transfer", values().paymentFields || {});
   updateTemplateUI();
   iconRefresh();
 })();
