@@ -2,3 +2,43 @@
 @media(max-width:1050px){.workspace{grid-template-columns:1fr}.preview-panel{position:relative;top:auto}.paper-wrap{max-height:none}.page-head{align-items:flex-start;flex-direction:column}.head-actions{width:100%}}
 @media(max-width:720px){body{font-size:13px}.topbar{height:60px;padding:0 14px}.brand{font-size:13px}.top-actions .autosave{display:none}.ghost-btn{padding:8px}.app-shell{padding:18px 12px 40px}.page-head h1{font-size:25px}.subhead{font-size:12px}.head-actions{flex-wrap:wrap}.head-actions .secondary-btn,.head-actions .primary-btn{flex:1}.invoice-bar{margin-bottom:10px}.form-card{padding:15px;margin-bottom:10px;border-radius:11px}.section-head{margin-bottom:13px}.section-hint{display:none}.grid.two{grid-template-columns:1fr}.items-head{display:none}.item-row{grid-template-columns:minmax(0,1fr) 68px 88px 92px 32px;gap:5px}.item-row input,.item-row select{padding:8px 7px;font-size:11px}.payment-methods{grid-template-columns:repeat(2,1fr)}.payment-card{padding:8px}.adjustment-grid{grid-template-columns:1fr}.branding-row{grid-template-columns:1fr}.templates{grid-template-columns:repeat(5,1fr)}.template-card{padding:4px}.template-card small{display:none}.template-thumb{height:42px}.preview-panel{padding:8px;border-radius:11px}.invoice-paper{min-width:640px;padding:30px 28px}.paper-wrap{margin:0 -2px}.share-grid{grid-template-columns:1fr}.history-toolbar{align-items:flex-start;gap:10px;flex-direction:column}.saved-item{align-items:flex-start;flex-direction:column}.saved-right{width:100%;justify-content:space-between}.charge-row{grid-template-columns:1fr 110px 32px}footer{padding:17px 14px}}
 @media print{body{background:#fff}.topbar,.page-head,.invoice-bar,.editor,.preview-head,.action-stack,footer{display:none!important}.app-shell{padding:0}.workspace{display:block}.preview-panel{border:0;background:#fff;padding:0;display:block}.paper-wrap{max-height:none;overflow:visible}.invoice-paper{box-shadow:none;margin:0 auto;min-height:auto;max-width:800px}.fullscreen-preview{display:none}}
+
+/* Refined visual theme */
+:root{
+  --bg:#eef3f1;
+  --panel:#ffffff;
+  --ink:#172321;
+  --muted:#687875;
+  --line:#d8e2df;
+  --soft:#f5f8f7;
+  --accent:#0f766e;
+  --accent-dark:#0b5f59;
+  --accent-soft:#e5f3f0;
+  --warm:#c96b3b;
+  --warm-soft:#fff0e8;
+  --success:#19704e;
+  --danger:#b54848;
+  --shadow:0 12px 32px rgba(19,48,44,.08);
+  --radius:16px
+}
+body{background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif}
+.topbar{height:70px;background:#123331;border-bottom:1px solid #214a46;padding:0 30px;box-shadow:0 5px 18px rgba(13,40,37,.12)}
+.brand{color:#f7fbfa}.brand-mark{background:#e5f3f0;color:#123331;border-radius:10px;width:34px;height:34px}.autosave{color:#b8cbc7}.autosave svg{color:#8ed0c4}
+.ghost-btn{color:#d9e8e5}.ghost-btn:hover{background:#214640;color:#fff}.secondary-btn{border-color:#cfdcda;background:#fff;color:#20302d}.secondary-btn:hover{background:#f5f8f7;border-color:#b9ccc8}
+.primary-btn{background:var(--accent);box-shadow:0 5px 14px rgba(15,118,110,.2)}.primary-btn:hover{background:var(--accent-dark)}
+.app-shell{max-width:1480px;padding:30px 30px 62px}.eyebrow{color:#6c817d}.page-head h1{color:#122725}.subhead{color:#6c7d79}
+.state-badge{border-color:#d5e1de;background:#f3f7f6;color:#5e716d}.state-badge.paid{background:#e5f4ec;border-color:#c3e2d2;color:#19704e}.state-badge.shared{background:#e7f3f1;border-color:#c8e3df;color:#0f766e}
+.invoice-bar{border-color:var(--line);border-radius:14px;box-shadow:0 3px 14px rgba(20,50,46,.04)}.invoice-avatar{background:#dfeeea;color:#14534e}
+.form-card{border-color:var(--line);box-shadow:0 3px 14px rgba(20,50,46,.035);border-radius:16px;padding:21px}
+.section-kicker{color:#78908b}.section-head h2{color:#18302d}label{color:#536863}
+label input,label select,label textarea,.adjustment-box>input,.tax-box input{border-color:#d5e0dd;background:#fcfdfd;color:#1c2b29;border-radius:10px}label input:focus,label select:focus,label textarea:focus,.adjustment-box>input:focus,.tax-box input:focus{border-color:#68a9a0;box-shadow:0 0 0 3px rgba(15,118,110,.09);outline:none}
+.items-head{color:#80908d}.item-row input,.item-row select,.charge-row input{border-color:#d5e0dd;background:#fcfdfd;border-radius:9px}.add-row,.small-btn{background:#edf5f3;border-color:#cfe0dc;color:#21625c;border-radius:9px}.add-row:hover,.small-btn:hover{background:#e2efec}
+.adjustment-box{border-color:#d9e3e0;background:#f7faf9;border-radius:12px}.box-title strong{color:#29403c}.charge-head{border-top-color:#dce5e2}
+.payment-methods{grid-template-columns:repeat(4,1fr);gap:9px}.payment-card{border-color:#d4dfdc;background:#fbfcfc;border-radius:11px;color:#41534f;padding:10px}.payment-card:hover{border-color:#9fc4bd;background:#f4f9f7}.payment-card span{background:#edf3f1;color:#52716b}.payment-card.active{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent);color:#0b5f59}.payment-card.active span{background:#cfe8e3;color:#0f766e}
+.cash-note{border-color:#c9ddd8;background:#f3f8f6}.cash-note strong{color:#29413d}
+.upload-box{border-color:#cbdad6;background:#f7faf9;border-radius:12px}.upload-box:hover{background:#edf5f3;border-color:#8eb6ae}.templates{gap:8px}.template-card{border-color:#d5e0dd;background:#fff;border-radius:10px}.template-card.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:#f5faf9}.template-thumb{background:#eaf1ef;border-radius:7px}.template-thumb .tbar{background:#4f7771}.template-thumb .tl{background:#a9bfba}.template-thumb .tr{background:#c5d6d2}.template-thumb .tt{background:#71958e}.template-thumb.bold .tbar{background:#315954}.template-thumb.clean{background:#fff;border-color:#dce5e2}.template-thumb.clean .tr{background:#173b37}
+.preview-panel{background:#dfe9e6;border-color:#cbdad6;border-radius:16px;box-shadow:0 8px 26px rgba(24,57,52,.07)}.preview-head span{color:#18302d}.preview-head small{color:#71827e}
+.invoice-paper{box-shadow:0 12px 34px rgba(22,48,44,.14);border-radius:4px}.inv-header{border-bottom-color:#dce5e2}.inv-business h2{color:#153632}.inv-label{color:#0f766e}.inv-title h1{color:#172c29}.bill h4,.inv-footer h5{color:#758985}.bill-name{color:#18302d!important}.payment-heading{color:#20544e}.inv-table th{color:#70827e;border-bottom-color:#d9e3e0}.inv-table td{border-bottom-color:#e8eeec}.inv-summary .total{border-top-color:#18312e;color:#18312e}.tax-jurisdiction{color:#82938f}.inv-footer{border-top-color:#dce5e2}.paid-ribbon{border-color:#b8dfce;color:#19704e;background:#edf9f3}
+.share-dialog,.history-dialog{border-radius:18px}.share-dialog::backdrop,.history-dialog::backdrop{background:rgba(9,31,28,.5)}.share-option{border-color:#d8e3e0;background:#fff;border-radius:12px}.share-option:hover{background:#f4f9f7;border-color:#a8c6c0}.share-option>span{background:#eaf3f1;color:#27635d}.filter-btn{background:#edf3f1;color:#60716d}.filter-btn.active{background:#123b37;color:#fff}.saved-icon{background:#e5f1ee;color:#215b54}.saved-actions button{border-color:#d5e0dd}.empty-history>div{background:#e5f1ee;color:#2a625b}.toast{background:#153532}
+footer{background:#123331;border-top-color:#214a46;color:#abc0bc}
+@media(max-width:720px){.topbar{padding:0 14px}.app-shell{padding:20px 12px 42px}.form-card{padding:16px}.payment-methods{grid-template-columns:repeat(2,1fr)}}
