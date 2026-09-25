@@ -3,52 +3,88 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="InvoiceForge — create clean invoices, then download or share them without signing up.">
+  <meta name="description" content="InvoiceForge is a simple, polished invoice maker for freelancers, creators and small businesses.">
   <title>InvoiceForge — Free Invoice Maker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#" aria-label="InvoiceForge home"><span class="brand-mark">IF</span><span>InvoiceForge</span></a>
+    <a class="brand" href="#" aria-label="InvoiceForge home">
+      <span class="brand-mark">IF</span>
+      <span>InvoiceForge</span>
+    </a>
     <div class="top-actions">
       <button class="ghost-btn" id="newInvoiceBtn"><i data-lucide="file-plus-2"></i><span>New</span></button>
-      <button class="ghost-btn" id="savedBtn"><i data-lucide="clock-3"></i><span>Saved</span></button>
+      <button class="ghost-btn" id="savedBtn"><i data-lucide="history"></i><span>History</span></button>
     </div>
   </header>
 
   <main>
     <section class="hero" id="hero">
-      <div>
-        <p class="eyebrow">Simple invoicing</p>
-        <h1>Make an invoice that looks like you know what you're doing.</h1>
-        <p class="hero-copy">Create a professional invoice in minutes. No account, no watermark, no accounting degree.</p>
-        <button class="primary-btn hero-cta" id="startBtn"><i data-lucide="arrow-right"></i> Create an invoice</button>
-      </div>
-      <div class="hero-paper">
-        <div class="mini-invoice">
-          <div class="mini-top"><span>INVOICE</span><strong>#INV-0042</strong></div>
-          <div class="mini-lines"><span></span><span></span><span></span></div>
-          <div class="mini-total"><small>Total due</small><strong>₦150,000</strong></div>
+      <div class="hero-copy-wrap">
+        <div class="eyebrow-row"><span class="eyebrow-dot"></span><p class="eyebrow">Invoice, without the headache</p></div>
+        <h1>Invoices that look <em>proper.</em></h1>
+        <p class="hero-copy">Build a polished invoice, save it for later, mark it paid when the money lands, and share it wherever your client is.</p>
+        <div class="hero-actions">
+          <button class="primary-btn hero-cta" id="startBtn"><i data-lucide="sparkles"></i> Create an invoice</button>
+          <button class="text-btn" id="heroHistoryBtn"><i data-lucide="history"></i> View history</button>
         </div>
+        <div class="hero-meta">
+          <span><i data-lucide="check"></i>No account</span>
+          <span><i data-lucide="check"></i>No watermark</span>
+          <span><i data-lucide="check"></i>Saved on your device</span>
+        </div>
+      </div>
+      <div class="hero-stage">
+        <div class="hero-glow"></div>
+        <div class="floating-chip chip-top"><i data-lucide="badge-check"></i><span>Looks professional</span></div>
+        <div class="hero-paper">
+          <div class="mini-invoice">
+            <div class="mini-brand"><span>AC</span><div><strong>Acme Creative</strong><small>Creative studio</small></div></div>
+            <div class="mini-title"><span>INVOICE</span><strong>#INV-0042</strong></div>
+            <div class="mini-client"><span>BILLED TO</span><strong>Bright Labs</strong><small>Website development</small></div>
+            <div class="mini-lines"><span></span><span></span><span></span></div>
+            <div class="mini-bottom"><small>Total due</small><strong>₦150,000</strong></div>
+          </div>
+        </div>
+        <div class="floating-chip chip-bottom"><i data-lucide="check-circle-2"></i><span>Payment received</span></div>
       </div>
     </section>
 
     <section class="builder hidden" id="builder">
       <div class="builder-head">
         <div>
-          <p class="eyebrow">Invoice builder</p>
+          <div class="eyebrow-row"><span class="eyebrow-dot"></span><p class="eyebrow">Invoice builder</p></div>
           <h2 id="builderTitle">Create your invoice</h2>
         </div>
-        <div class="status-pill"><span></span> Saved on this device</div>
+        <div class="builder-actions">
+          <div class="status-pill" id="saveStatus"><span></span><b>Saved locally</b></div>
+          <button class="secondary-btn compact" id="saveDraftBtn"><i data-lucide="save"></i> Save draft</button>
+          <button class="primary-btn compact" id="paidToggleBtn"><i data-lucide="circle-check"></i> Mark as paid</button>
+        </div>
+      </div>
+
+      <div class="invoice-bar">
+        <div class="invoice-bar-main">
+          <div class="invoice-avatar" id="invoiceAvatar">IF</div>
+          <div>
+            <strong id="invoiceBarNumber">INV-0001</strong>
+            <span id="invoiceBarClient">New invoice</span>
+          </div>
+        </div>
+        <div class="invoice-bar-right">
+          <span class="state-badge draft" id="invoiceStateBadge">Draft</span>
+          <button class="icon-btn" id="duplicateBtn" title="Duplicate invoice"><i data-lucide="copy-plus"></i></button>
+        </div>
       </div>
 
       <div class="template-strip">
-        <div>
-          <h3>Choose a design</h3>
-          <p>Switch styles anytime. Your information stays intact.</p>
+        <div class="template-intro">
+          <span class="template-kicker">01</span>
+          <div><h3>Pick your look</h3><p>Your content stays the same.</p></div>
         </div>
         <div class="templates" id="templates"></div>
       </div>
@@ -56,7 +92,7 @@
       <div class="workspace">
         <form class="editor" id="invoiceForm">
           <section class="form-card">
-            <div class="section-title"><span>01</span><div><h3>Your business</h3><p>Who is sending the invoice?</p></div></div>
+            <div class="section-title"><span>02</span><div><h3>Your business</h3><p>Give the invoice your identity.</p></div></div>
             <div class="grid two">
               <label>Business name<input name="businessName" placeholder="Your business name"></label>
               <label>Email<input name="businessEmail" type="email" placeholder="you@example.com"></label>
@@ -67,7 +103,7 @@
           </section>
 
           <section class="form-card">
-            <div class="section-title"><span>02</span><div><h3>Bill to</h3><p>Who is receiving the invoice?</p></div></div>
+            <div class="section-title"><span>03</span><div><h3>Bill to</h3><p>Who is receiving the invoice?</p></div></div>
             <div class="grid two">
               <label>Client / company<input name="clientName" placeholder="Client or company name"></label>
               <label>Client email<input name="clientEmail" type="email" placeholder="client@example.com"></label>
@@ -76,9 +112,9 @@
           </section>
 
           <section class="form-card">
-            <div class="section-title"><span>03</span><div><h3>Invoice details</h3><p>The basics your client needs.</p></div></div>
+            <div class="section-title"><span>04</span><div><h3>Invoice details</h3><p>The dates and reference your client needs.</p></div></div>
             <div class="grid two">
-              <label>Invoice number<input name="invoiceNumber" value="INV-0042"></label>
+              <label>Invoice number<input name="invoiceNumber" value="INV-0001"></label>
               <label>Currency<select name="currency">
                 <option value="NGN">NGN — Nigerian Naira</option><option value="USD">USD — US Dollar</option>
                 <option value="GBP">GBP — British Pound</option><option value="EUR">EUR — Euro</option>
@@ -90,7 +126,7 @@
           </section>
 
           <section class="form-card">
-            <div class="section-title"><span>04</span><div><h3>What are you charging for?</h3><p>Add products or services.</p></div></div>
+            <div class="section-title"><span>05</span><div><h3>What are you charging for?</h3><p>Add as many products or services as you need.</p></div></div>
             <div class="items-head"><span>Description</span><span>Qty</span><span>Rate</span><span></span></div>
             <div id="items"></div>
             <button type="button" class="secondary-btn add-item" id="addItem"><i data-lucide="plus"></i> Add item</button>
@@ -101,49 +137,56 @@
           </section>
 
           <section class="form-card">
-            <div class="section-title"><span>05</span><div><h3>Payment & notes</h3><p>Help your client know what happens next.</p></div></div>
-            <div class="grid two">
-              <label>Payment method<select name="paymentMethod">
-                <option>Bank transfer</option><option>Cash</option><option>Card</option><option>PayPal</option><option>Other</option>
-              </select></label>
-              <label>Payment details<input name="paymentDetails" placeholder="Bank • Account name • Account number"></label>
-              <label class="full">Notes<textarea name="notes" rows="3">Thank you for your business!</textarea></label>
-              <label class="full">Terms & conditions<textarea name="terms" rows="3" placeholder="Payment is due within 14 days."></textarea></label>
-            </div>
+            <div class="section-title"><span>06</span><div><h3>How can they pay?</h3><p>Only show the details that make sense for the payment method.</p></div></div>
+            <div class="payment-methods" id="paymentMethods"></div>
+            <div class="grid two payment-fields" id="paymentFields"></div>
+            <label class="full notes-label">Notes<textarea name="notes" rows="3">Thank you for your business!</textarea></label>
+            <label class="full">Terms & conditions<textarea name="terms" rows="3" placeholder="Payment is due within 14 days."></textarea></label>
           </section>
 
           <section class="form-card">
-            <div class="section-title"><span>06</span><div><h3>Logo</h3><p>Optional. Your logo is kept on this device.</p></div></div>
+            <div class="section-title"><span>07</span><div><h3>Logo</h3><p>Optional. Your logo stays on this device.</p></div></div>
             <label class="upload-box" for="logoInput"><i data-lucide="image-up"></i><span><strong>Choose a logo</strong><small>PNG, JPG or SVG</small></span></label>
             <input id="logoInput" type="file" accept="image/*" hidden>
           </section>
         </form>
 
         <aside class="preview-panel">
-          <div class="preview-head"><span>Live preview</span><button class="icon-btn" id="fullscreenBtn" title="Preview"><i data-lucide="maximize-2"></i></button></div>
+          <div class="preview-head"><div><span>Live preview</span><small id="previewStatus">Draft invoice</small></div><button class="icon-btn" id="fullscreenBtn" title="Preview"><i data-lucide="maximize-2"></i></button></div>
           <div class="paper-wrap"><div id="invoicePreview" class="invoice-paper"></div></div>
           <div class="action-stack">
             <button class="primary-btn" id="downloadPdf"><i data-lucide="download"></i> Download PDF</button>
-            <button class="secondary-btn" id="shareBtn"><i data-lucide="share-2"></i> Share invoice</button>
+            <button class="secondary-btn" id="shareBtn"><i data-lucide="share-2"></i> Share invoice <span class="action-note">saves first</span></button>
           </div>
         </aside>
       </div>
     </section>
   </main>
 
+  <footer><span>InvoiceForge</span><span>Developed by Zibah</span></footer>
+
   <dialog id="shareDialog" class="share-dialog">
-    <div class="dialog-head"><div><p class="eyebrow">Invoice ready</p><h3>How do you want to share it?</h3></div><button class="icon-btn" id="closeShare"><i data-lucide="x"></i></button></div>
+    <div class="dialog-head"><div><p class="eyebrow">Saved automatically</p><h3>How do you want to share it?</h3><p class="dialog-copy">Your latest changes have already been saved to history.</p></div><button class="icon-btn" id="closeShare"><i data-lucide="x"></i></button></div>
     <div class="share-grid">
       <button class="share-option" id="emailShare"><span><i data-lucide="mail"></i></span><strong>Email invoice</strong><small>Open your email app with the invoice summary.</small></button>
       <button class="share-option" id="nativeShare"><span><i data-lucide="send"></i></span><strong>Share summary</strong><small>WhatsApp, Telegram, Messages and other apps.</small></button>
-      <button class="share-option" id="copyShare"><span><i data-lucide="copy"></i></span><strong>Copy as text</strong><small>Copy a clean invoice summary to your clipboard.</small></button>
+      <button class="share-option" id="copyShare"><span><i data-lucide="copy"></i></span><strong>Copy as text</strong><small>Copy a clean invoice summary.</small></button>
       <button class="share-option" id="htmlShare"><span><i data-lucide="file-code-2"></i></span><strong>Download HTML</strong><small>A standalone invoice page you can send anywhere.</small></button>
-      <button class="share-option" id="pdfShare"><span><i data-lucide="file-down"></i></span><strong>Download PDF</strong><small>Print-ready invoice.</small></button>
+      <button class="share-option" id="pdfShare"><span><i data-lucide="file-down"></i></span><strong>Download PDF</strong><small>Open the print dialog and save as PDF.</small></button>
     </div>
   </dialog>
 
-  <dialog id="savedDialog" class="share-dialog">
-    <div class="dialog-head"><div><p class="eyebrow">On this device</p><h3>Saved invoices</h3></div><button class="icon-btn" id="closeSaved"><i data-lucide="x"></i></button></div>
+  <dialog id="savedDialog" class="history-dialog">
+    <div class="dialog-head"><div><p class="eyebrow">Your workspace</p><h3>Invoice history</h3><p class="dialog-copy">Every invoice you save stays here on this device.</p></div><button class="icon-btn" id="closeSaved"><i data-lucide="x"></i></button></div>
+    <div class="history-toolbar">
+      <div class="history-filters" id="historyFilters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="draft">Drafts</button>
+        <button class="filter-btn" data-filter="shared">Shared</button>
+        <button class="filter-btn" data-filter="paid">Paid</button>
+      </div>
+      <button class="text-btn danger-text" id="clearHistoryBtn"><i data-lucide="trash-2"></i> Clear all</button>
+    </div>
     <div id="savedList" class="saved-list"></div>
   </dialog>
 
