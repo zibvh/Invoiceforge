@@ -1,63 +1,54 @@
 # InvoiceForge
 
-InvoiceForge is a small invoice maker for people who just need to make a good-looking invoice and get on with their day.
+InvoiceForge is a small, browser-based invoice maker for people who just need to send a proper invoice without creating an account or fighting a complicated dashboard.
 
-It runs in the browser, works well on phones, and doesn't ask you to create an account before you can use it.
+It is built with plain HTML, CSS and JavaScript, so it can be hosted almost anywhere.
 
-## What it does
+## What it handles
 
-- Build invoices with a live preview
-- Choose from five invoice styles
-- Add products or services, tax and discounts
-- Use NGN, USD, GBP, EUR, KES or ZAR
-- Add your logo
-- Choose payment details based on the actual payment method
-- Save invoices as drafts and come back to them later
-- Keep a local history of saved invoices
-- Edit, duplicate or delete previous invoices
-- Mark an invoice as paid or unpaid
-- Sharing automatically saves the latest version first
-- Share by email, your phone's share sheet or copied text
-- Download a standalone HTML invoice
-- Print or save the invoice as PDF
-- Keep everything on the device using local storage
+- Professional invoice layouts
+- USD as the default currency
+- Other common currencies including NGN, GBP, EUR, KES and ZAR
+- Business and client billing details
+- Invoice numbers, purchase order numbers and references
+- Issue and due dates
+- Line items with quantity, unit and rate
+- Units such as each, hour, day, foot, inch, meter, kg, barrel and box
+- Discounts
+- Tax percentage, tax label and tax jurisdiction
+- Additional charges such as freight, delivery and handling
+- Payment methods with fields that match the method
+- PayPal email and payment link
+- Cash App $Cashtag and payment link
+- Venmo username and payment link
+- Zelle email or phone
+- Bank transfer details
+- Notes and terms
+- Optional logo
+- Multiple invoice styles
+- Paid / unpaid status
+- Automatic local saving
+- Invoice history with editing, duplication and deletion
+- Sharing, copying, HTML export and print-to-PDF
 
-## Payment methods
+## Tax note
 
-Payment fields change depending on what you select.
+The invoice lets you enter the tax rate and the tax jurisdiction that applies to the customer's billing address. It does not pretend to determine a legally correct tax rate from an address without a tax service or jurisdiction database.
 
-For example, PayPal asks for a PayPal email instead of bank details. Cash App asks for a username, Venmo asks for a username, Zelle asks for an email or phone number, and bank transfer shows bank and account fields.
+## Privacy
 
-That way the final invoice only shows payment information that actually makes sense.
-
-## Saving and history
-
-Save a draft whenever you want. Opening another invoice won't wipe the one you were working on.
-
-Sharing an invoice saves it to history automatically. You can then find it later under History, edit it, duplicate it for another client, or mark it paid when the payment arrives.
-
-Saved invoices are stored locally in your browser. Clearing the browser's site data can remove them.
+Invoices and drafts are stored in your browser's local storage. There is no built-in account system or invoice server.
 
 ## Run it
 
-There is no build step.
+Open `index.html` in a browser, or serve the folder with any simple static web server.
 
-Open `index.html` directly, or put the folder on any static host such as GitHub Pages, Netlify or Render.
-
-For PDF files, use the browser's print dialog and choose **Save as PDF**.
-
-## Tech
-
-InvoiceForge is intentionally simple:
+## Built with
 
 - HTML
 - CSS
 - JavaScript
-- LocalStorage
 - Lucide icons
-
-No framework, backend or account system is required.
-
-## Credits
+- Browser localStorage
 
 Developed by Zibah.
