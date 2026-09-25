@@ -180,7 +180,7 @@ function openShare(){saveCurrent("shared",false);shareDialog.showModal();}
 function renderPaymentMethods(){
   const selected=form.elements.paymentMethod?.value||"Bank transfer";
   $("#paymentMethods").innerHTML=Object.entries(paymentData).map(([name,cfg])=>`<button type="button" class="payment-card ${selected===name?"active":""}" data-payment="${esc(name)}"><span><i data-lucide="${cfg.icon}"></i></span><strong>${esc(name)}</strong></button>`).join("");
-  $$('[data-payment]',$("#paymentMethods")).forEach(btn=>btn.onclick=()=>{const method=btn.dataset.payment;form.elements.paymentMethod.value=method;const current=values().paymentFields||{};renderPaymentFields(method,current);render();queueAutosave();});
+  $$('[data-payment]',$("#paymentMethods")).forEach(btn=>btn.onclick=()=>{const method=btn.dataset.payment;form.elements.paymentMethod.value=method;const current=values().paymentFields||{};renderPaymentFields(method,current);renderPaymentMethods();render();queueAutosave();});
   iconRefresh();
 }
 function renderPaymentFields(method,data={}){
