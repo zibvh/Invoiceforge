@@ -8,6 +8,9 @@ const templates = $("#templates");
 const toast = $("#toast");
 const shareDialog = $("#shareDialog");
 const savedDialog = $("#savedDialog");
+const receiptAskDialog = $("#receiptAskDialog");
+const receiptDialog = $("#receiptDialog");
+const receiptPreview = $("#receiptPreview");
 
 let logoData = "";
 let currentTemplate = "modern";
@@ -15,6 +18,7 @@ let currentInvoiceId = null;
 let currentStatus = "draft";
 let historyFilter = "all";
 let saveTimer = null;
+let receiptTemplate = "default";
 
 const HISTORY_KEY = "invoiceforge-history";
 const DRAFT_KEY = "invoiceforge-current";
@@ -177,6 +181,49 @@ function download(name,content,type){const a=document.createElement("a");a.href=
 function downloadPdf(){saveCurrent("draft",false);window.print();}
 function openShare(){saveCurrent("shared",false);shareDialog.showModal();}
 
+
+const receiptTemplates=[
+  {id:"default",name:"Signature",desc:"Premium"},
+  {id:"minimal",name:"Minimal",desc:"Simple"},
+  {id:"classic",name:"Classic",desc:"Formal"},
+  {id:"thermal",name:"Thermal",desc:"Compact"},
+  {id:"modern",name:"Modern",desc:"Bold"}
+];
+
+function receiptNumber(o){return `RC-${String(o.invoiceNumber||"0001").replace(/[^a-z0-9]/gi,"").slice(-8)}`;}
+function receiptData(){const o=values();o.status="paid";return {o,t:calc(o),currency:o.currency||"USD"};}
+function receiptRows(o,currency){return (o.items||[]).filter(x=>x.description||x.rate).map((x,i)=>`<tr><td>${i+1}</td><td><strong>${esc(x.description||"Service")}</strong><small>${esc(x.unit||"each")}</small></td><td>${x.qty}</td><td>${money(x.rate,currency)}</td><td>${money(x.qty*x.rate,currency)}</td></tr>`).join("")||`<tr><td>1</td><td><strong>Payment received</strong></td><td>1</td><td>${money(calc(o).total,currency)}</td><td>${money(calc(o).total,currency)}</td></tr>`;}
+function receiptMarkup(){
+  const {o,t,currency}=receiptData();
+  const method=o.paymentMethod||"Bank transfer";
+  const business=o.businessName||"Your business";
+  const client=o.clientName||"Client";
+  const note=o.notes||"Thank you for your business. We appreciate your trust and look forward to working with you again.";
+  const contact=[o.businessPhone,o.businessEmail,o.businessWebsite].filter(Boolean).join(" · ");
+  const rows=receiptRows(o,currency);
+  const logo=o.logo?`<img class="receipt-logo" src="${o.logo}" alt="">`:``;
+  const signature=`<div class="receipt-signature"><div class="signature-script">${esc(business)}</div><div class="signature-line"></div><span>${esc(business)}</span></div>`;
+  const common=`<div class="receipt-meta"><div><span>Receipt No.</span><strong>${esc(receiptNumber(o))}</strong></div><div><span>Date</span><strong>${esc(o.issueDate||today())}</strong></div></div>`;
+  if(receiptTemplate==="minimal")return `<div class="r-min-head"><div>${logo}<h1>RECEIPT</h1></div>${common}</div><div class="r-min-rule"></div><div class="r-min-party"><div><span>RECEIVED FROM</span><strong>${esc(client)}</strong><p>${esc(o.clientAddress)}</p></div><div><span>PAYMENT</span><strong>${esc(method)}</strong><p>${esc(paymentSummary(o))}</p></div></div><div class="r-min-total"><span>AMOUNT PAID</span><strong>${money(t.total,currency)}</strong></div><div class="r-min-note">${esc(note)}</div><div class="r-min-footer"><span>${esc(business)}</span><span>${esc(contact)}</span></div>`;
+  if(receiptTemplate==="classic")return `<div class="r-classic-top"><div>${logo}<h1>${esc(business)}</h1><p>${esc(contact)}</p><p>${esc(o.businessAddress)}</p></div><div><h2>RECEIPT</h2>${common}</div></div><div class="r-classic-client"><div><span>RECEIVED FROM</span><strong>${esc(client)}</strong><p>${esc(o.clientAddress)}</p></div><div><span>PAYMENT METHOD</span><strong>${esc(method)}</strong><p>${esc(paymentSummary(o)||"—")}</p></div></div><table><thead><tr><th>#</th><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="r-classic-bottom"><div><span>Note</span><p>${esc(note)}</p></div><div><span>TOTAL PAID</span><strong>${money(t.total,currency)}</strong></div></div><div class="r-classic-footer">Paid in full · ${esc(business)}</div>`;
+  if(receiptTemplate==="thermal")return `<div class="thermal-brand">${logo}<strong>${esc(business)}</strong><span>PAYMENT RECEIPT</span></div><div class="thermal-info"><div>Receipt <b>${esc(receiptNumber(o))}</b></div><div>Date <b>${esc(o.issueDate||today())}</b></div><div>Customer <b>${esc(client)}</b></div><div>Method <b>${esc(method)}</b></div></div><div class="thermal-items">${(o.items||[]).filter(x=>x.description||x.rate).map(x=>`<div><span>${esc(x.description||"Service")} × ${x.qty}</span><b>${money(x.qty*x.rate,currency)}</b></div>`).join("")}</div><div class="thermal-total"><span>TOTAL PAID</span><strong>${money(t.total,currency)}</strong></div><p class="thermal-thanks">${esc(note)}</p><div class="thermal-footer">${esc(contact||business)}</div>`;
+  if(receiptTemplate==="modern")return `<div class="r-modern-head"><div>${logo}<span>PAYMENT RECEIPT</span><h1>${esc(business)}</h1></div><div class="r-modern-paid">PAID</div></div><div class="r-modern-info"><div><span>RECEIVED FROM</span><strong>${esc(client)}</strong><p>${esc(o.clientAddress)}</p></div><div><span>RECEIPT</span><strong>${esc(receiptNumber(o))}</strong><p>${esc(o.issueDate||today())}</p></div></div><div class="r-modern-total"><span>AMOUNT RECEIVED</span><strong>${money(t.total,currency)}</strong><small>${esc(method)} · ${esc(paymentSummary(o)||"Payment recorded")}</small></div><div class="r-modern-items">${(o.items||[]).filter(x=>x.description||x.rate).map(x=>`<div><span>${esc(x.description||"Service")} <small>${x.qty} ${esc(x.unit||"each")}</small></span><b>${money(x.qty*x.rate,currency)}</b></div>`).join("")}</div><div class="r-modern-footer"><div><span>THANK YOU</span><p>${esc(note)}</p></div>${signature}</div>`;
+  return `<div class="r-default-banner"><div class="r-brand-left">${logo}<div><strong>${esc(business)}</strong><b>CREATIVE SOLUTIONS</b><small>${esc(contact||o.businessAddress||"Clean Designs · Reliable Service")}</small></div></div><div class="r-contact"><span>${esc(o.businessPhone||"")}</span><span>${esc(o.businessEmail||"")}</span><small>${esc(o.businessWebsite||"Always here to help.")}</small></div></div><div class="r-default-body"><div class="r-default-title"><h1>RECEIPT</h1>${common}</div><div class="r-default-party"><div><span>CLIENT DETAILS</span><strong>${esc(client)}</strong><p>${esc(o.clientAddress)}</p></div><div><span>PAYMENT DETAILS</span><p>Payment Method: <b>${esc(method)}</b></p><p>Status: <em>Paid</em></p><p>Currency: <b>${esc(currency)}</b></p></div></div><table><thead><tr><th>#</th><th>DESCRIPTION</th><th>QTY</th><th>UNIT PRICE</th><th>AMOUNT</th></tr></thead><tbody>${rows}</tbody></table><div class="r-default-total"><span>TOTAL</span><strong>${money(t.total,currency)}</strong></div><div class="r-default-note"><span>NOTE</span><p>${esc(note)}</p></div><div class="r-default-signatures"><div><div></div><span>CLIENT SIGNATURE</span></div>${signature}</div><div class="r-thanks">THANK YOU FOR YOUR TRUST</div></div>`;
+}
+function renderReceiptStyles(){const box=$("#receiptStyles");box.innerHTML=receiptTemplates.map(x=>`<button type="button" class="receipt-style ${receiptTemplate===x.id?"active":""}" data-receipt-template="${x.id}"><div class="receipt-style-thumb ${x.id}"><i data-lucide="receipt-text"></i></div><strong>${x.name}</strong><small>${x.desc}</small></button>`).join("");$$('[data-receipt-template]',box).forEach(b=>b.onclick=()=>{receiptTemplate=b.dataset.receiptTemplate;renderReceiptStyles();renderReceipt();});iconRefresh();}
+function renderReceipt(){receiptPreview.className=`receipt-paper receipt-${receiptTemplate}`;receiptPreview.innerHTML=receiptMarkup();}
+async function receiptCanvas(){if(!window.html2canvas)throw new Error("Renderer unavailable");renderReceipt();return await html2canvas(receiptPreview,{scale:2,backgroundColor:null,useCORS:true,logging:false});}
+async function downloadReceiptPng(){try{const canvas=await receiptCanvas();const a=document.createElement("a");a.download=`${receiptNumber(values())}.png`;a.href=canvas.toDataURL("image/png");a.click();showToast("Receipt PNG downloaded");}catch(e){showToast("Receipt image could not be created");}}
+async function downloadReceiptPdf(){try{const canvas=await receiptCanvas();const {jsPDF}=window.jspdf;const ratio=canvas.height/canvas.width;const pdf=new jsPDF({orientation:ratio>1?"portrait":"landscape",unit:"px",format:[canvas.width,canvas.height]});pdf.addImage(canvas.toDataURL("image/png"),"PNG",0,0,canvas.width,canvas.height);pdf.save(`${receiptNumber(values())}.pdf`);showToast("Receipt PDF downloaded");}catch(e){showToast("Receipt PDF could not be created");}}
+async function shareReceipt(){try{const canvas=await receiptCanvas();const blob=await new Promise(r=>canvas.toBlob(r,"image/png"));const file=new File([blob],`${receiptNumber(values())}.png`,{type:"image/png"});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({title:`${receiptNumber(values())} receipt`,files:[file]});}else{await navigator.clipboard.writeText("Receipt ready: "+receiptNumber(values()));showToast("Image sharing isn't supported here");}}catch(e){if(e.name!=="AbortError")showToast("Receipt sharing failed");}}
+
+$("#skipReceipt").onclick=()=>receiptAskDialog.close();
+$("#createReceipt").onclick=()=>{receiptAskDialog.close();receiptTemplate="default";renderReceiptStyles();renderReceipt();receiptDialog.showModal();iconRefresh();};
+$("#closeReceipt").onclick=()=>receiptDialog.close();
+$("#receiptPng").onclick=downloadReceiptPng;
+$("#receiptPdf").onclick=downloadReceiptPdf;
+$("#receiptShare").onclick=shareReceipt;
+
 function renderPaymentMethods(){
   const selected=form.elements.paymentMethod?.value||"Bank transfer";
   $("#paymentMethods").innerHTML=Object.entries(paymentData).map(([name,cfg])=>`<button type="button" class="payment-card ${selected===name?"active":""}" data-payment="${esc(name)}"><span><i data-lucide="${cfg.icon}"></i></span><strong>${esc(name)}</strong></button>`).join("");
@@ -207,7 +254,13 @@ function updateTemplateUI(){
 
 $("#newInvoiceBtn").onclick=newInvoice;$("#savedBtn").onclick=openSaved;$("#closeSaved").onclick=()=>savedDialog.close();$("#closeShare").onclick=()=>shareDialog.close();
 $("#saveStatus").onclick=()=>showToast("Changes are saved automatically on this device");
-$("#paidToggleBtn").onclick=()=>{currentStatus=currentStatus==="paid"?"draft":"paid";saveCurrent(currentStatus,true);};
+$("#paidToggleBtn").onclick=()=>{
+  if(currentStatus==="paid"){currentStatus="draft";saveCurrent("draft",true);return;}
+  currentStatus="paid";
+  saveCurrent("paid",false);
+  receiptAskDialog.showModal();
+  iconRefresh();
+};
 $("#duplicateBtn").onclick=()=>{const copy=values();copy.invoiceId=makeId();copy.invoiceNumber=`${copy.invoiceNumber||"INV"}-COPY`;copy.status="draft";copy.issueDate=today();copy.dueDate=today(14);loadData(copy);showToast("Invoice duplicated");};
 $("#addItem").onclick=()=>{addItem();render();queueAutosave();};
 $("#addCharge").onclick=()=>{addCharge();render();queueAutosave();};
